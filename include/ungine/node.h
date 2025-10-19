@@ -24,21 +24,24 @@ namespace ungine { namespace node { struct NODE_TREE {
 namespace ungine { class node_t : public global_t {
 public:
 
-    event_t<>      onOpen  ;
-    event_t<>      onUIDraw;
-    event_t<>      on2DDraw;
-    event_t<>      on3DDraw;
-    event_t<>      onDraw  ;
-    event_t<float> onLoop  ;
-    event_t<>      onClose ;
+    event_t<node_t*> onCollision;
+    event_t<>        onNext  ;
+    event_t<>        onOpen  ;
+    event_t<>        onUIDraw;
+    event_t<>        on2DDraw;
+    event_t<>        on3DDraw;
+    event_t<>        onDraw  ;
+    event_t<float>   onLoop  ;
+    event_t<>        onClose ;
 
 protected:
 
     using DONE = node::NODE_TREE;
 
     struct NODE { DONE node ;
-        void* evdr=nullptr, *evlp=nullptr, *evcl=nullptr;
-        bool state=false  ; /*-------------------------*/
+        void* evdr=nullptr, *evlp=nullptr;
+        void* evcl=nullptr, *evnx=nullptr;
+        bool state=false  ; /*----------*/
     };  ptr_t<NODE> obj;
 
     static void node_iterator( function_t<void,node_t*> cb, node_t* root, bool deep ) {
@@ -66,9 +69,29 @@ protected:
         self->obj->node.node=&self; return self;
     }
 
+    void free_() const noexcept {
+
+        if ( !exists() ) /*---------*/ { return; } obj->state= false; 
+        for( auto x: get_children()   ){ x->obj->node.parent=nullptr; }
+        if ( !process::should_close() ){ remove_from_parent(); }
+        
+        onCollision.clear(); onNext  .clear();
+        on2DDraw   .clear(); onUIDraw.clear();
+        onOpen     .clear(); on3DDraw.clear();
+        onLoop     .clear(); onClose .emit ();
+        
+        if( !process::should_close() ){ 
+            engine::onNext .off( obj->evnx );
+            engine::onLoop .off( obj->evlp );
+            engine::onDraw .off( obj->evdr );
+            engine::onClose.off( obj->evcl );
+        }
+
+    }
+
 public:
 
-    virtual ~node_t() noexcept { if( obj.count()>1 ){ return; } free(); }
+    virtual ~node_t() noexcept { if( obj.count()>1 ){ return; }free_(); }
 
     /*----*/ node_t() noexcept : global_t(), obj( new NODE ) { init_(); }
 
@@ -77,11 +100,16 @@ public:
     node_t( function_t<void,ref_t<node_t>> cb ) noexcept : global_t(), obj( new NODE ) {
         engine::locker.lock(); auto self = init_(); self->obj->state = true;
 
-        obj->evcl = engine::onClose.once([=](){ self->free(); });
+        obj->evcl = engine::onClose([=](){ self->free_(); });
 
         obj->evlp = engine::onLoop([=]( float delta ){
             if( !self->exists() ){ return; }
                  self->onLoop.emit( delta );
+        });
+
+        obj->evnx = engine::onNext([=]( /**/ ){
+            if( !self->exists() ){ return; }
+                 self->onNext.emit();
         });
 
         obj->evdr = engine::onDraw([=]( /**/ ){
@@ -213,28 +241,17 @@ public:
 
     }
 
+    node_t* get_node() const noexcept {  
+        return type::cast<node_t>( obj->node.node );
+    }
+
     /*─······································································─*/
 
     bool exists() const noexcept { return obj->state; }
 
-    void remove() const noexcept { free(); }
-
-    void free() const noexcept {
-
-        if ( !exists() ) /*---------*/ { return; } obj->state= false; 
-        for( auto x: get_children()   ){ x->obj->node.parent=nullptr; }
-        
-        on2DDraw.clear(); onUIDraw.clear();
-        onOpen  .clear(); on3DDraw.clear();
-        onLoop  .clear(); onClose .emit ();
-        
-        if( !process::should_close   ){ 
-            engine::onLoop .off( obj->evlp );
-            engine::onDraw .off( obj->evdr );
-            engine::onClose.off( obj->evcl );
-            remove_from_parent(); 
-        }
-
+    void free() const noexcept { auto self = type::bind( this );
+        if( !self->exists() ) { return; } /*-----------*/
+        process::add([=](){ self->free_(); return -1; }); 
     }
 
 };}

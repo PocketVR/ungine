@@ -48,7 +48,10 @@ public:
 
     rl::Vector2 size() const noexcept {
         if( !is_valid() ){ return rl::Vector2({ 0, 0 }); }
-        /*--------------*/ return { obj->txt.texture.width, obj->txt.texture.height };
+        /*--------------*/ return { 
+            type::cast<float>( obj->txt.texture.width  ), 
+            type::cast<float>( obj->txt.texture.height ) 
+        };
     }
 
     rl::Texture& get_texture() const noexcept { return obj->txt.texture; }
@@ -69,8 +72,8 @@ public:
     void draw( transform_2D_t pos ) const noexcept {
         rl::DrawTexturePro( 
             obj->txt.texture, rect_t({
-                0, 0, obj->txt.texture.width, 
-                /*-*/ obj->txt.texture.height
+                0, 0, type::cast<float>( obj->txt.texture.width  ), 
+                /*-*/ type::cast<float>( obj->txt.texture.height )
             }), rect_t({
                 pos.translate.position.x, pos.translate.position.y,
                 pos.translate.scale.x,    pos.translate.scale.y
@@ -87,9 +90,10 @@ public:
 
     /*─······································································─*/
 
-    vec2_t get_size() const noexcept {
-        return vec2_t({ obj->txt.texture.width, obj->txt.texture.height });
-    }
+    vec2_t get_size() const noexcept { return vec2_t({ 
+        type::cast<float>( obj->txt.texture.width  ), 
+        type::cast<float>( obj->txt.texture.height ) 
+    }); }
 
     void set_size( int width, int height ) const noexcept {
         if( obj->txt.texture.width==width && obj->txt.texture.height==height )

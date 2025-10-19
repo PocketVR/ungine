@@ -47,7 +47,10 @@ public:
 
     rl::Vector2 size() const noexcept {
         if( !is_valid() ){ return rl::Vector2({ 0, 0 }); }
-        /*--------------*/ return { obj->txt.width, obj->txt.height };
+        /*--------------*/ return { 
+            type::cast<float>( obj->txt.width  ), 
+            type::cast<float>( obj->txt.height )
+        };
     }
 
     void set_filter( uint filter ) const noexcept {
@@ -74,8 +77,8 @@ public:
 
     void draw( transform_2D_t pos ) const noexcept {
         rl::DrawTexturePro( obj->txt, rect_t({
-                0, 0, obj->txt.width, 
-                /*-*/ obj->txt.height
+                0, 0, type::cast<float>( obj->txt.width  ), 
+                /*-*/ type::cast<float>( obj->txt.height )
             }), rect_t({
                 pos.translate.position.x, pos.translate.position.y,
                 pos.translate.scale.x,    pos.translate.scale.y
@@ -94,8 +97,8 @@ public:
 
     void draw( rect_t pos, float angle=0 ) const noexcept {
         rl::DrawTexturePro( obj->txt, rect_t({
-                0, 0, obj->txt.width, 
-                /*-*/ obj->txt.height
+                0, 0, type::cast<float>( obj->txt.width  ), 
+                /*-*/ type::cast<float>( obj->txt.height )
             }), rect_t({
                 pos.x    , pos.y,
                 pos.width, pos.height

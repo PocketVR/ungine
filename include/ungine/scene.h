@@ -167,9 +167,8 @@ return node_t([=]( ref_t<node_t> self ){
     render::emit( [&](){ if( rnd.null() ){ return; }
         
         auto txt = rnd->get().texture; 
-
-        auto src = rect_t({ 0, 0, txt.width,-txt.height });
-        auto dst = rect_t({ 0, 0, txt.width, txt.height });
+        auto src = rect_t({ 0, 0, type::cast<float>( txt.width ), type::cast<float>(-txt.height ) });
+        auto dst = rect_t({ 0, 0, type::cast<float>( txt.width ), type::cast<float>( txt.height ) });
 
         rl::DrawTexturePro ( txt, src, dst, vec2_t({ 0, 0 }), .0f, rl::WHITE );
 
@@ -233,9 +232,8 @@ return node_t([=]( ref_t<node_t> self ){
     render::emit( [&](){ if( rnd.null() ){ return; }
         
         auto txt = rnd->get().texture; 
-
-        auto src = rect_t({ 0, 0, txt.width,-txt.height });
-        auto dst = rect_t({ 0, 0, txt.width, txt.height });
+        auto src = rect_t({ 0, 0, type::cast<float>( txt.width ), type::cast<float>(-txt.height ) });
+        auto dst = rect_t({ 0, 0, type::cast<float>( txt.width ), type::cast<float>( txt.height ) });
 
         rl::DrawTexturePro ( txt, src, dst, vec2_t({ 0, 0 }), .0f, rl::WHITE );
 

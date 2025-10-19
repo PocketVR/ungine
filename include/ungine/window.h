@@ -38,7 +38,16 @@ namespace ungine { namespace window {
 
     inline ivec2_t get_size() { return ivec2_t({ rl::GetRenderWidth(), rl::GetRenderHeight() }); }
 
-    inline vec2_t normalized( vec2_t pos ) { return pos * vec2_t({ rl::GetRenderWidth(), rl::GetRenderHeight() }); }
+}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace ungine { namespace window {
+    
+    inline vec2_t normalized( vec2_t pos ) { return pos * vec2_t({ 
+        type::cast<float>( rl::GetRenderWidth () ), 
+        type::cast<float>( rl::GetRenderHeight() ) 
+    }); }
 
 }}
 
