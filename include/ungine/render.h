@@ -17,13 +17,12 @@
 namespace ungine { class render_t : public global_t {
 protected:
 
-    struct NODE { rl::RenderTexture txt; }; ptr_t<NODE> obj;
+    struct NODE { rl::RenderTexture txt; char filter=-1; }; ptr_t<NODE> obj;
 
 public:
 
     /*─······································································─*/
 
-    /*----*/ render_t() noexcept : global_t(), obj( new NODE() ){ /*---*/ }
     virtual ~render_t() noexcept { if( obj.count()>1 ){ return; } free(); }
 
     /*─······································································─*/
@@ -33,7 +32,11 @@ public:
     }
 
     render_t( int width, int height ) noexcept : global_t(), obj( new NODE() ){
-        obj->txt = rl::LoadRenderTexture( width, height );
+        set_size( width, height );
+    }
+    
+    render_t() noexcept : global_t(), obj( new NODE() ){ 
+        set_size( rl::GetRenderWidth(), rl::GetRenderHeight() );
     }
 
     /*─······································································─*/
@@ -43,6 +46,13 @@ public:
     rl::RenderTexture* operator->() const noexcept { return &get(); }
 
     rl::RenderTexture& get() const noexcept { return obj->txt; }
+
+    void set_filter( uint filter ) const noexcept {
+         if( obj->filter==filter ){ return; }
+         rl::SetTextureFilter( obj->txt.depth  , filter );
+         rl::SetTextureFilter( obj->txt.texture, filter );
+         obj->filter = filter;
+    }
 
     /*─······································································─*/
 
@@ -98,66 +108,17 @@ public:
     void set_size( int width, int height ) const noexcept {
         if( obj->txt.texture.width==width && obj->txt.texture.height==height )
           { return; } free(); obj->txt = rl::LoadRenderTexture( width,height );
+          set_filter( rl::TEXTURE_FILTER_BILINEAR );
     }
 
     /*─······································································─*/
 
     void free() const noexcept {
-         if( !is_valid() ){ return; } rl::UnloadRenderTexture( obj->txt );
+         if( !is_valid() ){ return; } 
+         rl::UnloadRenderTexture( obj->txt ); obj->filter=-1;
     }
 
 };}
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
-namespace ungine { namespace render {
-
-    void emit_scissor( rect_t scissor, function_t<void> callback ) {
-         rl::BeginScissorMode( scissor.x, scissor.y, scissor.width, scissor.height );
-         callback(); rl::EndScissorMode(); /*-------------------------------------*/
-    }
-
-    void emit_render( render_2D_t* render, function_t<void> callback ) {
-         if( render == nullptr ){ return; }
-         rl::BeginTextureMode( *render ); callback();
-         rl::EndTextureMode  (); /*----------------*/
-    }
-
-    void emit_shader( shader_t* shader, function_t<void> callback ) {
-         if( shader == nullptr ){ return; }
-         rl::BeginShaderMode( shader->get() ); callback();
-         rl::EndShaderMode  ();
-    }
-
-    void emit_blend( uint blend_mode, function_t<void> callback ) {
-         rl::BeginBlendMode( blend_mode ); callback();
-         rl::EndBlendMode  (); /*-------------------*/
-    }
-
-    void emit_2D( camera_2D_t* cam, function_t<void> callback ) {
-         if( cam == nullptr ){ return; }
-         rl::BeginMode2D( *cam ); callback();
-         rl::EndMode2D  (); /*-------------*/
-    }
-
-    void emit_3D( camera_3D_t* cam, function_t<void> callback ) {
-         if( cam == nullptr ){ return; }
-         rl::BeginMode3D( *cam ); callback();
-         rl::EndMode3D  (); /*-------------*/
-    }
-
-    void emit_vr( vr_t* device, function_t<void> callback ) {
-         if( device == nullptr ){ return; }
-         rl::BeginVrStereoMode( device->device() ); callback();
-         rl::EndVrStereoMode  (); /*-------------------------*/
-    }
-
-    void emit( function_t<void> callback ) {
-         rl::BeginDrawing(); callback();
-         rl::EndDrawing  (); /*-------*/
-    }
-
-}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

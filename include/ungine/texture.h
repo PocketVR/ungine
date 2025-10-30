@@ -17,7 +17,7 @@
 namespace ungine { class texture_t : public global_t {
 protected:
 
-    struct NODE { rl::Texture2D txt; }; ptr_t<NODE> obj;
+    struct NODE { rl::Texture2D txt; char filter=-1; }; ptr_t<NODE> obj;
 
 public:
 
@@ -33,15 +33,19 @@ public:
         auto data = stream::await( file ); /*--------------------------------------------*/
         auto img  = rl::LoadImageFromMemory( ext.get(), (uchar*) data.get(), data.size() );
         obj->txt  = rl::LoadTextureFromImage( img ); rl::UnloadImage( img );
+        set_filter( rl::TEXTURE_FILTER_BILINEAR );
     }
 
     texture_t( rl::Image image ) noexcept : global_t(), obj( new NODE() ) {
         obj->txt = rl::LoadTextureFromImage( image );
+        set_filter( rl::TEXTURE_FILTER_BILINEAR );
     }
 
     texture_t( string_t path ) noexcept : global_t(), obj( new NODE() ) {
         obj->txt = rl::LoadTexture( path.get() );
+        set_filter( rl::TEXTURE_FILTER_BILINEAR );
     }
+
 
     /*─······································································─*/
 
@@ -54,7 +58,9 @@ public:
     }
 
     void set_filter( uint filter ) const noexcept {
-        rl::SetTextureFilter( obj->txt, filter );
+         if( obj->filter==filter ){ return; }
+         rl::SetTextureFilter( obj->txt, filter );
+         obj->filter = filter;
     }
 
     /*─······································································─*/

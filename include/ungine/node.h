@@ -215,7 +215,7 @@ public:
     }
 
     node_t* get_root() const noexcept { 
-        node_t* root = type::cast<node_t>( obj->node.node ); 
+    node_t* root = type::cast<node_t>( obj->node.node ); 
 
         do { if ( root->get_parent()==nullptr ){ break; }
              root=root->get_parent(); 
@@ -281,25 +281,17 @@ return node_t([=]( ref_t<node_t> self ){
         auto rt = pt->translate.rotation + tr->rotation;
 
         auto ps = pt->translate.position 
-        /*---*/ + rl::Vector2Rotate( tr->position * tr->scale, pt->translate.rotation )
-        /*---*/ - rl::Vector2Rotate( tr->origin   + vec2_t({
-            pt->translate.scale.x / 2,
-            pt->translate.scale.y / 2
-        }) , rt );
+        /*---*/ + rl::Vector2Rotate( tr->position, pt->translate.rotation );
 
-        tr->translate.position = ps * tr->scale;
-        tr->translate.scale    = tr->scale;
+        tr->translate.position = ps;
         tr->translate.rotation = rt;
+        tr->translate.scale    = tr->scale; // sc
 
     } else { DEFAULT:;
 
         tr->translate.scale    = tr->scale;
         tr->translate.rotation = tr->rotation;
-        tr->translate.position = tr->position
-        /*------------------*/ - rl::Vector2Rotate( tr->origin + vec2_t({
-            tr->translate.scale.x / 2,
-            tr->translate.scale.y / 2
-        }), tr->translate.rotation );
+        tr->translate.position = tr->position;
 
     }});
 
@@ -330,11 +322,7 @@ return node_t([=]( ref_t<node_t> self ){
         auto rt = pt->translate.rotation + tr->rotation;
 
         auto ps = pt->translate.position 
-        /*---*/ + rl::Vector2Rotate( tr->position, pt->translate.rotation )
-        /*---*/ - rl::Vector2Rotate( tr->origin + vec2_t({
-            tr->translate.scale.x / 2,
-            tr->translate.scale.y / 2
-        }), rt );
+        /*---*/ + rl::Vector2Rotate( tr->position, pt->translate.rotation );
 
         tr->translate.position = ps;
         tr->translate.rotation = rt;
@@ -344,11 +332,7 @@ return node_t([=]( ref_t<node_t> self ){
 
         tr->translate.scale    = tr->scale;
         tr->translate.rotation = tr->rotation;
-        tr->translate.position = tr->position
-        /*------------------*/ - rl::Vector2Rotate( tr->origin + vec2_t({
-            tr->translate.scale.x / 2,
-            tr->translate.scale.y / 2
-        }), tr->translate.rotation );
+        tr->translate.position = tr->position;
 
     }});
 
@@ -376,11 +360,11 @@ return node_t([=]( ref_t<node_t> self ){
     if ( pt == nullptr ){ goto DEFAULT; }
 
         tr->translate.position = math::vec3      ::rotation  ( tr->position, 
-        /*--------------------*/ math::quaternion::from_euler( pt->translate.rotation )) 
+        /*------------------*/   math::quaternion::from_euler( pt->translate.rotation )) 
         /*------------------*/ + pt->translate.position;
 
         tr->translate.rotation = math::quaternion::to_euler  ( math::quaternion::multiply(
-        /*--------------------*/ math::quaternion::from_euler( pt->translate.rotation ) 
+        /*------------------*/   math::quaternion::from_euler( pt->translate.rotation ) 
         /*------------------*/ , math::quaternion::from_euler( tr->rotation )));
 
         tr->translate.scale    = tr->scale;

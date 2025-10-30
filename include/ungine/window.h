@@ -30,6 +30,8 @@ namespace ungine { namespace window {
 
     inline void set_opacity( float opacity )   { rl::SetWindowOpacity( opacity ); }
 
+    inline void resize( ivec2_t size )         { rl::SetWindowSize( size.x, size.y ); }
+
     inline void set_size( ivec2_t size )       { rl::SetWindowSize( size.x, size.y ); }
 
     inline void set_min_size( ivec2_t size )   { rl::SetWindowMinSize( size.x, size.y ); }

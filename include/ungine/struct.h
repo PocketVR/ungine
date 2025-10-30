@@ -158,6 +158,23 @@ namespace ungine { namespace blend { enum MODE {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+namespace ungine { namespace collision { enum MODE {
+
+    COLLISION_MODE_NONE    = 0x00000000,
+    COLLISION_MODE_3D      = 0x00000001,
+    COLLISION_MODE_2D      = 0x00000010,
+
+    COLLISION_MODE_SPH     = 0x00000100,
+    COLLISION_MODE_RAY     = 0x00001000,
+    COLLISION_MODE_BOX     = 0x00010000,
+    COLLISION_MODE_MESH    = 0x00100000,
+    
+    COLLISION_MODE_VISIBLE = 0x01000000,
+
+};}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { namespace window { enum FLAGS {
 
     WINDOW_VSYNC_HINT        = 0x00000040, // Set to try enabling V-Sync on GPU
@@ -262,9 +279,22 @@ namespace ungine { namespace gpu { enum ATTR_TYPE {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+namespace ungine { namespace shape { enum MODE {
+
+    SHAPE_DRAW_NONE   = 0x00000000,
+    SHAPE_DRAW_FACES  = 0x00000001,
+    SHAPE_DRAW_EDGES  = 0x00000010,
+    SHAPE_DRAW_VERTEX = 0x00000100
+
+};}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { namespace camera { enum VIEW {
+
     PROJECTION_PERSPECTIVE=0, // Perspective  projection
     PROJECTION_ORTHOGRAPHIC   // Orthographic projection
+
 }; }}
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -290,13 +320,19 @@ namespace ungine { namespace render { enum MODE {
 
 namespace ungine {
 
-    using color_t = rl::Color;
+    using color_t     = rl::Color;
 
-    using   mat_t = rl::Matrix; 
-    using  vec2_t = rl::Vector2;
-    using  vec3_t = rl::Vector3;
-    using  vec4_t = rl::Vector4;
-    using  rect_t = rl::Rectangle;
+    using mat_t       = rl::Matrix; 
+    using vec2_t      = rl::Vector2;
+    using vec3_t      = rl::Vector3;
+    using vec4_t      = rl::Vector4;
+    using rect_t      = rl::Rectangle;
+
+}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace ungine {
 
     struct bvec2_t { bool  x; bool y; };
     struct ivec2_t {  int  x;  int y; };
@@ -314,42 +350,41 @@ namespace ungine {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+namespace ungine { struct camera_3D_t {
+    float  fovy, far=500.f, near=0.1f;
+    vec3_t position, target, up;
+    int    projection;
+}; }
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { struct transform_3D_t {
 
     struct priv {
-        vec3_t rotation = { 0, 0, 0 };
-        vec3_t position = { 0, 0, 0 };
-        vec3_t scale    = { 1, 1, 1 };
-    } translate = {0};
+    vec3_t rotation = { 0, 0, 0 };
+    vec3_t position = { 0, 0, 0 };
+    vec3_t scale    = { 1, 1, 1 };
+    } /**/ translate= {0};
 
     vec3_t rotation = { 0, 0, 0 };
     vec3_t position = { 0, 0, 0 };
     vec3_t scale    = { 1, 1, 1 };
-    vec3_t origin   = { 0, 0, 0 };
 
 };}
 
 namespace ungine { struct transform_2D_t {
     
     struct priv {
-        float  rotation = .0f;
-        vec2_t position = { 0, 0 };
-        vec2_t scale    = { 1, 1 };
-    } translate = {0};
+    float  rotation = .0f;
+    vec2_t position = { 0, 0 };
+    vec2_t scale    = { 1, 1 };
+    } /**/ translate= {0};
     
     float  rotation = .0f;
     vec2_t position = { 0, 0 };
     vec2_t scale    = { 1, 1 };
-    vec2_t origin   = { 0, 0 };
 
 };}
-
-namespace ungine { 
-    using render_2D_t    = rl::RenderTexture;
-    using transform_UI_t = transform_2D_t; 
-    using camera_2D_t    = rl::Camera2D; 
-    using camera_3D_t    = rl::Camera3D;
-}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
@@ -358,6 +393,12 @@ namespace ungine { struct visibility_t {
     uint mode    = render::MODE::RENDER_MODE_UI;
     bool visible = true;
 };}
+
+namespace ungine {
+    using camera_2D_t    = rl::Camera2D; 
+    using transform_UI_t = transform_2D_t; 
+    using render_2D_t    = rl::RenderTexture;
+}
 
 namespace ungine { struct viewport_t {
     uint mask = render::MASK::VISIBILITY_MASK_ALL;
@@ -372,6 +413,40 @@ namespace ungine { struct render_queue_t {
     queue_t<event_t<>> event2D;
     queue_t<event_t<>> eventUI;
 };}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace ungine { namespace rl { void BeginMode3D( camera_3D_t& cam ){
+    
+    rlDrawRenderBatchActive();        // Update and draw internal render batch
+    rlMatrixMode(RL_PROJECTION);      // Switch to projection matrix
+    rlPushMatrix(); rlLoadIdentity(); // Reset current matrix (projection)
+
+    float aspect = GetRenderWidth() * 1.016f / GetRenderHeight();
+
+    if ( cam.projection == CAMERA_PERSPECTIVE ) {
+
+        double top   = cam.near * tan(cam.fovy * 0.5 * DEG2RAD);
+        double right = aspect   * top;
+        rlFrustum(-right, right, -top, top, cam.near, cam.far);
+
+    } else {
+
+        double top   = cam.fovy/2.0;
+        double right = aspect * top;
+        rlOrtho(-right, right, -top, top, cam.near, cam.far);
+
+    }
+
+    rlMatrixMode(RL_MODELVIEW);     // Switch back to modelview matrix
+    rlLoadIdentity();               // Reset current matrix (modelview)
+
+    Matrix matView = MatrixLookAt(cam.position, cam.target, cam.up);
+    rlMultMatrixf(MatrixToFloat(matView));
+
+    rlEnableDepthTest(); // Enable DEPTH_TEST for 3D
+
+}}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
