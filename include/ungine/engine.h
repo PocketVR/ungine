@@ -18,6 +18,7 @@ namespace ungine { namespace engine {
 
     event_t<>      onExit ;
     event_t<>      onOpen ;
+    event_t<>      onNext ;
     event_t<float> onLoop ;
     event_t<>      onClose;
     event_t<>      onDraw ;
@@ -55,9 +56,10 @@ namespace ungine { namespace engine {
     void start( int width, int height, string_t title ) {
 
         rl::InitWindow( width, height, title.get() );
-        process::onSIGEXIT([](){ close(); });
+        rl::rlSetClipPlanes( 0.1, 500 );
+    //  rl::SetExitKey(0);
 
-    // rl::SetExitKey(0);
+        process::onSIGEXIT([](){ close(); });
 
         process::add( coroutine::add( COROUTINE(){
         coBegin ; coWait( !is_ready() );
@@ -71,6 +73,15 @@ namespace ungine { namespace engine {
             coNext; } close();
 
         coFinish
+        }));
+
+        process::add( coroutine::add( COROUTINE(){
+        coBegin ; while( is_ready() ) {
+
+            coWait/*-*/( !is_ready() );
+            onNext.emit( /*-------*/ );
+
+        coDelay(10); } coFinish
         }));
 
     }

@@ -24,8 +24,8 @@ public:
     /*----*/ lock_t() noexcept : global_t(), obj( new NODE() ){}
     virtual ~lock_t() noexcept { /*--------------*/ }
 
-    void   lock() const noexcept { obj->value -= 1; }
-    void unlock() const noexcept { obj->value += 1; }
+    void      lock() const noexcept { obj->value -= 1; }
+    void    unlock() const noexcept { obj->value += 1; }
 
     bool is_locked() const noexcept { return obj->value != 0; }
 

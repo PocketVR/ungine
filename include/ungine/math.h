@@ -39,6 +39,10 @@ namespace ungine { namespace math { namespace quaternion {
         return out;
     }
 
+    vec4_t look_at( vec3_t a, vec3_t b, vec3_t up ) {
+        return from_matrix( rl::MatrixLookAt( a, b, up ) );
+    }
+
 }}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -51,6 +55,18 @@ namespace ungine { namespace math { namespace vec3 {
 
     vec3_t rotation( vec3_t origin, vec4_t quaternion ) {
         return rl::Vector3RotateByQuaternion( origin, quaternion );
+    }
+
+    vec3_t rotation( vec3_t origin, mat_t matrix ) {
+        return rl::Vector3RotateByQuaternion( origin, 
+               quaternion::from_matrix( matrix )
+        );
+    }
+
+    vec3_t rotation( vec3_t origin, vec3_t euler ) {
+        return rl::Vector3RotateByQuaternion( origin, 
+               quaternion::from_euler( euler )
+        );
     }
 
 }}}
@@ -82,6 +98,20 @@ namespace ungine { namespace math {
     vec3_t normalize( vec3_t value ){ return rl::Vector3Normalize( value ); }
 
     vec2_t normalize( vec2_t value ){ return rl::Vector2Normalize( value ); }
+
+}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace ungine { namespace math {
+
+    vec4_t invert( vec4_t value ){ return rl::Vector4Invert( value ); }
+
+    vec3_t invert( vec3_t value ){ return rl::Vector3Invert( value ); }
+
+    vec2_t invert( vec2_t value ){ return rl::Vector2Invert( value ); }
+
+    float  invert( float  value ){ return -value; }
 
 }}
 
@@ -176,6 +206,10 @@ namespace ungine { namespace math { namespace matrix {
         return /*-*/ math::quaternion::to_axis    ( out );
     }
 
+    mat_t look_at( vec3_t a, vec3_t b, vec3_t up ) {
+        return rl::MatrixLookAt( a, b, up );
+    }
+
 }}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -213,6 +247,10 @@ namespace ungine { namespace math { namespace euler {
     type::pair<vec3_t,float> to_axis( vec3_t input ) {
         vec4_t out = math::quaternion::from_euler(input);
         return /*-*/ math::quaternion::to_axis   ( out );
+    }
+
+    vec3_t look_at( vec3_t a, vec3_t b, vec3_t up ) {
+        return from_matrix( rl::MatrixLookAt( a, b, up ) );
     }
 
 }}}
