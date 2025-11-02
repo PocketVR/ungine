@@ -27,12 +27,12 @@ namespace ungine { namespace collision {
         auto pos = a.get_attribute<transform_3D_t>( "transform" );
         if ( pos == nullptr ){ break; }
 
-        auto rot = math::matrix::rotation( pos->translate.rotation );
+        auto rot = math::matrix::rotation( math::negate( pos->translate.rotation ) );
         auto out = ptr_t<vec3_t>( 3 );
 
-        out[0] = vec3_t({ rot.m0, rot.m1, rot.m2  });
-        out[1] = vec3_t({ rot.m4, rot.m5, rot.m6  });
-        out[2] = vec3_t({ rot.m8, rot.m9, rot.m10 });
+        out[0] = vec3_t({ rot.m0, rot.m4, rot.m8  });
+        out[1] = vec3_t({ rot.m1, rot.m5, rot.m9  });
+        out[2] = vec3_t({ rot.m2, rot.m6, rot.m10 });
 
     return out; } while(0); return nullptr; }
     
@@ -45,7 +45,7 @@ namespace ungine { namespace collision {
         auto shp  = a.get_attribute<shape_3D_t>    ( "shape" );
 
     if( pos==nullptr || col==nullptr || shp == nullptr ){ break; }
-    if( col->mode == collision::MODE::COLLISION_MODE_BOX ){
+    if( col->mode & collision::MODE::COLLISION_MODE_BOX ){
 
         auto axes = get_3D_collision_axes( a ); if( axes.empty() ){ break; }
 
@@ -55,6 +55,22 @@ namespace ungine { namespace collision {
 
         float c = Vector3DotProduct( pos->translate.position, axis );
         return ptr_t<float>({ c-r, c+r });
+
+    } elif( col->mode & collision::MODE::COLLISION_MODE_RAY ) {
+
+        auto  rot  = math::matrix::rotation( math::negate( pos->translate.rotation ) );
+        auto  fr   = vec3_t({ rot.m2, rot.m6, rot.m10 }); 
+
+        auto start = /*--------*/ pos->translate.position;
+        auto stop  = start + fr * pos->translate.scale;
+
+        float p_start = Vector3DotProduct( start, axis );
+        float p_stop  = Vector3DotProduct( stop,  axis );
+
+        float rmin = fminf( p_start, p_stop );
+        float rmax = fmaxf( p_start, p_stop );
+        
+        return ptr_t<float>({ rmin, rmax });
 
     } else {
 
@@ -69,7 +85,7 @@ namespace ungine { namespace collision {
             
             rl::Mesh mesh = shp->model->get().meshes[y];
             int stride    = mesh.vertices ? 3 : 0;
-            if( stride ==0 ){ continue; }
+            if( stride == 0 ){ continue; }
             
         for( int x=0; x<mesh.vertexCount; x++ ){
              int baseIndex = x * stride;
@@ -108,6 +124,7 @@ namespace ungine { namespace collision {
         )  { return false; }}
 
         for( int i=0; i<3; ++i ){ for( int j=0; j<3; ++j ){
+
             vec3_t cross_axis = Vector3CrossProduct( axes_a[i], axes_b[j] );
 
             if( Vector3Length(cross_axis) < EPSILON ){ continue; }
@@ -146,7 +163,7 @@ namespace ungine { namespace collision {
         if ( pos == nullptr ){ break; }
     
     if( pos==nullptr || col==nullptr || shp == nullptr ){ break; }
-    if( col->mode == collision::MODE::COLLISION_MODE_BOX ){
+    if( col->mode & collision::MODE::COLLISION_MODE_BOX ){
 
         auto axes = get_2D_collision_axes( a ); if( axes.empty() ){ break; }
 
@@ -213,7 +230,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_2D_t>( "transform"  );
         auto shp = self->get_attribute<shape_2D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_NONE;
+             shp->mode = shape::MODE::SHAPE_MODE_NONE;
 
     clb( self ); }); }
 
@@ -230,7 +247,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_2D_t>( "transform"  );
         auto shp = self->get_attribute<shape_2D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_NONE;
+             shp->mode = shape::MODE::SHAPE_MODE_NONE;
 
     clb( self ); }); }
 
@@ -247,7 +264,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_2D_t>( "transform"  );
         auto shp = self->get_attribute<shape_2D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_VERTEX;
+             shp->mode = shape::MODE::SHAPE_MODE_VERTEX;
 
     clb( self ); }); }
     
@@ -266,7 +283,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_3D_t>( "transform"  );
         auto shp = self->get_attribute<shape_3D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_NONE;
+             shp->mode = shape::MODE::SHAPE_MODE_NONE;
 
     clb( self ); }); }
 
@@ -283,7 +300,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_3D_t>( "transform"  );
         auto shp = self->get_attribute<shape_3D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_NONE;
+             shp->mode = shape::MODE::SHAPE_MODE_NONE;
 
     clb( self ); }); }
 
@@ -300,7 +317,7 @@ namespace ungine { namespace node {
         auto pos = self->get_attribute<transform_3D_t>( "transform"  );
         auto shp = self->get_attribute<shape_3D_t>    ( "shape" );
         
-             shp->mode = shape::MODE::SHAPE_DRAW_NONE;
+             shp->mode = shape::MODE::SHAPE_MODE_NONE;
         
     clb( self ); }); }
     

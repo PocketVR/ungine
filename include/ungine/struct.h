@@ -303,10 +303,10 @@ namespace ungine { namespace collision { enum MASK {
 
 namespace ungine { namespace shape { enum MODE {
 
-    SHAPE_DRAW_NONE      = 0x00000000,
-    SHAPE_DRAW_FACES     = 0x00000001,
-    SHAPE_DRAW_EDGES     = 0x00000010,
-    SHAPE_DRAW_VERTEX    = 0x00000100
+    SHAPE_MODE_NONE      = 0x00000000,
+    SHAPE_MODE_FACES     = 0x00000001,
+    SHAPE_MODE_EDGES     = 0x00000010,
+    SHAPE_MODE_VERTEX    = 0x00000100
 
 };}}
 

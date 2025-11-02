@@ -16,7 +16,7 @@
 
 // FIXME: ADD SHAPE 2D DRAW SELECTOR SUPPORT
 namespace ungine { struct shape_2D_t {
-    int mode /**/ = shape::MODE::SHAPE_DRAW_FACES;
+    int mode /**/ = shape::MODE::SHAPE_MODE_FACES;
     color_t color = rl::WHITE;
     ptr_t<vec2_t>   points ;
     ptr_t<shader_t> shader ;
@@ -48,11 +48,11 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
 
-        if( shp->mode & shape::MODE::SHAPE_DRAW_FACES ){
+        if( shp->mode & shape::MODE::SHAPE_MODE_FACES ){
             rl::DrawTriangleFan( ptr.data().get(), ptr.size(), shp->color );
-        } elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES ) {
+        } elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES ) {
            for( auto x: ptr.data() ){ rl::DrawCircleV( x, 3, shp->color ); }
-        } elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ 
+        } elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ 
            auto pt = ptr.data(); // console::log( "A" );
            for( int x=0; x<pt.size(); x++ )
               { rl::DrawLineV( pt[x],pt[x+1],shp->color ); }
@@ -111,7 +111,7 @@ namespace ungine { namespace node {
 /*────────────────────────────────────────────────────────────────────────────*/
 
 namespace ungine { struct shape_3D_t {
-    int mode /**/ = shape::MODE::SHAPE_DRAW_FACES;
+    int mode /**/ = shape::MODE::SHAPE_MODE_FACES;
     color_t color = rl::WHITE;
     ptr_t<model_t>  model ;
     ptr_t<shader_t> shader;
@@ -134,9 +134,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -158,9 +158,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -182,9 +182,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -206,9 +206,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -230,9 +230,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -254,9 +254,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -278,9 +278,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -302,9 +302,9 @@ namespace ungine { namespace node {
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
-            if  ( shp->mode & shape::MODE::SHAPE_DRAW_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
-            elif( shp->mode & shape::MODE::SHAPE_DRAW_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
+            if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
+            elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ shp->model->draw_vertex( *pos, shp->color ); }
             
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::EndShaderMode(); }
@@ -315,15 +315,25 @@ namespace ungine { namespace node {
     node_t node_ray( function_t<void,ref_t<node_t>> clb ) {
     return node_3D([=]( ref_t<node_t> self ){
 
+        /*------*/ self->set_attribute( "shape", shape_3D_t() );
+        auto shp = self->get_attribute<shape_3D_t>    ( "shape" );
         auto pos = self->get_attribute<transform_3D_t>( "transform" );
-        auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->mode == 0 ){ return; }
-            auto rot = math::matrix::rotation( math::negate( pos->translate.rotation ) );
-            auto fr  = vec3_t({ rot.m2, rot.m6, rot.m10 }); rl::DrawLine3D( 
-                pos->translate.position, 
-                pos->translate.position+ fr * pos->translate.scale
+        self->on3DDraw([=](){ if( shp->mode == 0x00 ){ return; }
+
+        auto rot = math::matrix::rotation( math::negate( pos->translate.rotation ) );
+        auto fr  = vec3_t({ rot.m2, rot.m6, rot.m10 }); 
+
+        if( shp->mode & ( shape::MODE::SHAPE_MODE_FACES | shape::MODE::SHAPE_MODE_EDGES ) ){
+            rl::DrawLine3D( 
+                /*--------------------------*/ pos->translate.position, 
+                pos->translate.position + fr * pos->translate.scale
             ,   shp->color );
+        } else {
+            rl::DrawSphere( pos->translate.position /*----------------------*/ , 3, shp->color );
+            rl::DrawSphere( pos->translate.position + fr * pos->translate.scale, 3, shp->color );
+        }
+
         });
 
     clb(self); }); }
