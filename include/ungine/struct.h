@@ -335,10 +335,6 @@ namespace ungine { namespace visibility { enum MASK {
 
 };}}
 
-namespace ungine { namespace render { enum MODE {
-    RENDER_MODE_UI, RENDER_MODE_2D, RENDER_MODE_3D
-};}}
-
 /*────────────────────────────────────────────────────────────────────────────*/
 
 namespace ungine {
@@ -425,15 +421,6 @@ namespace ungine { struct visibility_t {
 namespace ungine { struct collision_t {
     int mode = collision::MODE::COLLISION_MODE_NONE;
     int mask = collision::MASK::COLLISION_MASK_ALL ;
-};}
-
-namespace ungine { struct viewport_t {
-    int mask = visibility::MASK::VISIBILITY_MASK_ALL;
-    int mode = visibility::MODE::VISIBILITY_MODE_VR ;
-    color_t background = { 0, 0, 0, 255 };
-    ref_t<camera_2D_t> camera2D; 
-    ref_t<camera_3D_t> camera3D;
-    ref_t<render_2D_t> render  ;
 };}
 
 namespace ungine { struct render_queue_t {

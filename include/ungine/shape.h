@@ -14,7 +14,6 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-// FIXME: ADD SHAPE 2D DRAW SELECTOR SUPPORT
 namespace ungine { struct shape_2D_t {
     int mode /**/ = shape::MODE::SHAPE_MODE_FACES;
     color_t color = rl::WHITE;

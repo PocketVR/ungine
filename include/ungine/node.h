@@ -21,6 +21,17 @@ namespace ungine { namespace node { struct NODE_TREE {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+namespace ungine { struct viewport_t {
+    int mask = visibility::MASK::VISIBILITY_MASK_ALL;
+    int mode = visibility::MODE::VISIBILITY_MODE_ON ;
+    color_t background = { 0, 0, 0, 255 };
+    ref_t<camera_2D_t> camera2D; 
+    ref_t<camera_3D_t> camera3D;
+    ref_t<render_t>    render  ;
+};}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { class node_t : public global_t {
 public:
 
@@ -44,15 +55,18 @@ protected:
         bool state=false  ; /*----------*/
     };  ptr_t<NODE> obj;
 
-    static void node_iterator( function_t<void,node_t*> cb, node_t* root, bool deep ) {
+    static void node_iterator( function_t<bool,node_t*> cb, node_t* root, bool deep ) {
         
         if( root == nullptr ){ return; } node_t* node = root;
-        if( deep ){ cb( type::cast<node_t>( node->obj->node.node ) ); }
+        if( deep && !cb( type::cast<node_t>( node->obj->node.node ) ) )
+          { return; }
 
         auto x = node->obj->node.node_list.raw().first(); while( x!=nullptr ){
-        auto y = x->next; if( x->data.second.node==nullptr ){ goto NEXT; }
-        if( deep ){ node_iterator( cb, (node_t*)( x->data.second.node ), deep ); }
-        else /**/ { cb( type::cast<node_t>( x->data.second.node ) ); }
+        auto y = x->next; 
+
+            if  ( x->data.second.node==nullptr ) /*--------------------*/ { goto NEXT; }
+            if  ( deep ){ node_iterator( cb, (node_t*)( x->data.second.node ), deep ); }
+            elif( !cb( type::cast<node_t>( x->data.second.node ) ) ) /**/ { break; }
              
         NEXT:; x=y; }
 
@@ -177,18 +191,18 @@ public:
 
         get_root()->child_iterator([=]( node_t* node ){
 
-        //  if( node->has_attribute( "viewport" ) ){ return; }
-
             if( node->has_attribute /*---------------*/ ("visibility") ){
             auto vis = node->get_attribute<visibility_t>("visibility");
-            if(  vis->mode == 0x00 ) /*---*/ { return; }
-            if(( vis->mask & view->mask )==0){ return; }}
+            if(  vis->mode == 0x00 ) /*---*/ { return false; }
+            if(( vis->mask & view->mask )==0){ return false; }}
+
+        //  if( node->has_attribute( "viewport" ) ){ return; }
 
             if( !node->on3DDraw.empty() ){ que->event3D.push( node->on3DDraw ); }
             if( !node->on2DDraw.empty() ){ que->event2D.push( node->on2DDraw ); }
             if( !node->onUIDraw.empty() ){ que->eventUI.push( node->onUIDraw ); }
 
-        }, true ); return que;
+        return true; }, true ); return que;
 
     }
 
@@ -224,8 +238,14 @@ public:
         return root;
     }
 
-    void child_iterator( function_t<void,node_t*> cb, bool deep=false ) const noexcept {
-         node_iterator ( cb, (node_t*)( obj->node.node ), deep );
+    /*─······································································─*/
+
+    void node_iterator( function_t<void,node_t*> cb, bool deep=false ) const noexcept {
+         node_iterator( [=]( node_t* node ){ cb(node); return true; }, type::cast<node_t>( obj->node.node ), deep );
+    }
+
+    void child_iterator( function_t<bool,node_t*> cb, bool deep=false ) const noexcept {
+         node_iterator ( cb, type::cast<node_t>( obj->node.node ), deep );
     }
 
     /*─······································································─*/

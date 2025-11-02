@@ -68,6 +68,8 @@ public:
     rl::rlEnableBackfaceCulling();
     }
 
+    /*─······································································─*/
+
     void draw_edges( transform_3D_t trn, color_t color ) const noexcept {
     rl::rlDisableBackfaceCulling();
 
@@ -87,6 +89,8 @@ public:
 
     rl::rlEnableBackfaceCulling();
     }
+
+    /*─······································································─*/
 
     void draw_vertex( transform_3D_t trn, color_t color ) const noexcept {
     rl::rlDisableBackfaceCulling();

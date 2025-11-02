@@ -15,6 +15,49 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+/*
+namespace ungine { namespace rl {
+rl::RayCollision GetRayCollisionMesh( Ray ray, Mesh mesh, Matrix transform ){
+rl::RayCollision collision = { 0 };
+
+    // Check if mesh vertex data on CPU for testing
+    if( mesh.vertices != NULL ) {
+        int triangleCount = mesh.triangleCount;
+
+        // Test against all triangles in mesh
+    for( int i = 0; i < triangleCount; i++ ){
+        Vector3 a, b, c;
+        Vector3 *vertdata = (Vector3 *)mesh.vertices;
+
+        if( mesh.indices){
+            a = vertdata[mesh.indices[i*3 + 0]];
+            b = vertdata[mesh.indices[i*3 + 1]];
+            c = vertdata[mesh.indices[i*3 + 2]];
+        } else {
+            a = vertdata[i*3 + 0];
+            b = vertdata[i*3 + 1];
+            c = vertdata[i*3 + 2];
+        }
+
+        a = Vector3Transform(a, transform);
+        b = Vector3Transform(b, transform);
+        c = Vector3Transform(c, transform);
+
+        RayCollision triHitInfo = GetRayCollisionTriangle(ray, a, b, c);
+
+        if( triHitInfo.hit ){
+            // Save the closest hit triangle
+            if ((!collision.hit) || (collision.distance > triHitInfo.distance)) collision = triHitInfo;
+        }
+    
+    }}
+
+    return collision;
+}}}
+*/
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { namespace rl {
 Matrix GetTransformMatrix( vec3_t position, vec3_t scale, vec3_t rotation ) {
 Matrix mat = {0};

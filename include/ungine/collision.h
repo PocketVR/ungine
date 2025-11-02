@@ -14,6 +14,15 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
+namespace ungine { struct hit_t {
+    node_t* /**/ target = nullptr;
+    ptr_t<float> position ;
+    ptr_t<float> overlap  ;
+    ptr_t<float> direction;
+};}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
 namespace ungine { namespace collision { 
     
     bool is_overlap( ptr_t<float> proj1, ptr_t<float> proj2 ){
@@ -115,12 +124,12 @@ namespace ungine { namespace collision {
 
         for( auto& axis : axes_a ){ 
         if ( !is_overlap( get_3D_collision_projection(a, axis), 
-                          get_3D_collision_projection(b, axis) )
+        /*-------------*/ get_3D_collision_projection(b, axis) )
         )  { return false; }}
         
         for( auto& axis : axes_b ){ 
         if ( !is_overlap( get_3D_collision_projection(a, axis), 
-                          get_3D_collision_projection(b, axis) ) 
+        /*-------------*/ get_3D_collision_projection(b, axis) ) 
         )  { return false; }}
 
         for( int i=0; i<3; ++i ){ for( int j=0; j<3; ++j ){
@@ -130,7 +139,7 @@ namespace ungine { namespace collision {
             if( Vector3Length(cross_axis) < EPSILON ){ continue; }
                 
             if( !is_overlap( get_3D_collision_projection(a, cross_axis), 
-                             get_3D_collision_projection(b, cross_axis) )
+            /*------------*/ get_3D_collision_projection(b, cross_axis) )
             ) { return false; }
             
         }}
@@ -201,12 +210,12 @@ namespace ungine { namespace collision {
         
         for( auto& axis : axes_a ){ 
         if ( !is_overlap( get_2D_collision_projection(a, axis), 
-                          get_2D_collision_projection(b, axis) )
+        /*-------------*/ get_2D_collision_projection(b, axis) )
         )  { return false; }}
         
         for( auto& axis : axes_b ){ 
         if ( !is_overlap( get_2D_collision_projection(a, axis), 
-                          get_2D_collision_projection(b, axis) )
+        /*-------------*/ get_2D_collision_projection(b, axis) )
         )  { return false; }}
         
     return true; } while(0); return false; }

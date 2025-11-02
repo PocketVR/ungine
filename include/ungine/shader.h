@@ -34,7 +34,7 @@
 
 namespace ungine { namespace gpu { 
 
-template< class T > struct gpu_type_id  { static constexpr uchar value = 0xff; };
+template< class T > struct gpu_type_id         { static constexpr uchar value = 0xff; };
 
 template<> struct gpu_type_id<ptr_t<int>>      { static constexpr uchar value = 0x01; };
 template<> struct gpu_type_id<ptr_t<bool>>     { static constexpr uchar value = 0x02; };
@@ -177,10 +177,9 @@ public:
 
     template< class T >
     void append_uniform( string_t name, T value ) const noexcept {
-         auto val = type::bind( value ); obj->f_vars[name] = SVAR({ 
-            gpu::gpu_type_id<decltype(val)>::value, val
-         });
-    }
+    auto val = type::bind( value ); obj->f_vars[name] = SVAR({ 
+               gpu::gpu_type_id<decltype(val)>::value, val
+    }); }
 
     void remove_uniform( string_t name ) const noexcept {
          obj->f_vars.erase(name);
@@ -194,10 +193,9 @@ public:
 
     template< class T >
     void append_attribute( string_t name, T value ) const noexcept {
-         auto val = type::bind( value ); obj->v_vars[name] = SVAR({ 
-            gpu::gpu_type_id<decltype(val)>::value, val
-         });
-    }
+    auto val = type::bind( value ); obj->v_vars[name] = SVAR({ 
+               gpu::gpu_type_id<decltype(val)>::value, val
+    }); }
 
     void remove_attribute( string_t name ) const noexcept {
          obj->v_vars.erase(name);
