@@ -81,7 +81,7 @@ namespace ungine { namespace engine {
             coWait/*-*/( !is_ready() );
             onNext.emit( /*-------*/ );
 
-        coDelay(10); } coFinish
+        coNext; } coFinish
         }));
 
     }
