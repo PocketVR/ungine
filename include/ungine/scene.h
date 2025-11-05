@@ -160,9 +160,7 @@ return node_render([=]( ref_t<node_t> self ){
         for( auto x:data ) { for( auto y:data ) {
         if ( x == y ) /*----------*/ { continue; }
         if ( x->onCollision.empty() ){ continue; }
-        if ( collision::check_collision( *x,*y ) )
-           { x->onCollision.emit( y ); }
-        }}
+        collision::next( *x,*y ); }}
         
     });
 

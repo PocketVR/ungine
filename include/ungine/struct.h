@@ -407,12 +407,6 @@ namespace ungine { struct transform_2D_t {
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace ungine {
-    using camera_2D_t    = rl::Camera2D; 
-    using transform_UI_t = transform_2D_t; 
-    using render_2D_t    = rl::RenderTexture;
-}
-
 namespace ungine { struct visibility_t {
     int mode = visibility::MODE::VISIBILITY_MODE_ON ;
     int mask = visibility::MASK::VISIBILITY_MASK_ALL;
@@ -428,6 +422,12 @@ namespace ungine { struct render_queue_t {
     queue_t<event_t<>> event2D;
     queue_t<event_t<>> eventUI;
 };}
+
+namespace ungine {
+    using camera_2D_t    = rl::Camera2D; 
+    using transform_UI_t = transform_2D_t; 
+    using render_2D_t    = rl::RenderTexture;
+}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 

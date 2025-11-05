@@ -35,15 +35,15 @@ namespace ungine { struct viewport_t {
 namespace ungine { class node_t : public global_t {
 public:
 
-    event_t<node_t*> onCollision;
-    event_t<>        onNext  ;
-    event_t<>        onOpen  ;
-    event_t<>        onUIDraw;
-    event_t<>        on2DDraw;
-    event_t<>        on3DDraw;
-    event_t<>        onDraw  ;
-    event_t<float>   onLoop  ;
-    event_t<>        onClose ;
+    event_t<node_t*,any_t> onCollision;
+    event_t<>              onNext  ;
+    event_t<>              onOpen  ;
+    event_t<>              onUIDraw;
+    event_t<>              on2DDraw;
+    event_t<>              on3DDraw;
+    event_t<>              onDraw  ;
+    event_t<float>         onLoop  ;
+    event_t<>              onClose ;
 
 protected:
 

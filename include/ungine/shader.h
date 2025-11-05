@@ -22,7 +22,7 @@
     #define GLSL_VERSION "#version 100\nprecision mediump float;\n"
 #else 
 #if defined(GRAPHICS_API_OPENGL_33)
-    #define GLSL_VERSION "#version 330"
+    #define GLSL_VERSION "#version 330\n"
 #elif defined(GRAPHICS_API_OPENGL_21)
     #define GLSL_VERSION "#version 120\n"
 #else

@@ -5,40 +5,14 @@ using namespace nodepp;
 
 namespace ungine { void run() {
 
-    auto render_2D = node::node_render([=]( ref_t<node_t> self ){
-
-        auto pos = self->get_attribute<transform_3D_t>( "transform" );
-        auto viw = self->get_attribute<viewport_t>    ( "viewport" );
-
-        self->append_child( node::node_rectangle([=]( ref_t<node_t> self ){
-
-            auto pos = self->get_attribute<transform_2D_t>( "transform" );
-            auto shp = self->get_attribute<shape_2D_t>    ( "shape" );
-                 pos->scale *= 10; shp->color = rl::RED;
-
-            auto time = type::bind( new float(.0f) );
-
-            self->onLoop([=]( float delta ){
-                pos->position = vec2_t({
-                    sinf( *time ) * 100 + rl::GetRenderWidth ()/2,
-                    cosf( *time ) * 100 + rl::GetRenderHeight()/2
-                }); *time += delta;
-            });
-
-        }) );
-
-        self->onUIDraw([=](){ rl::DrawFPS( 100, 100 ); });
-
-    });
-
     node::node_scene([=]( ref_t<node_t> self ){
 
         auto pos = self->get_attribute<transform_3D_t>( "transform" );
         auto viw = self->get_attribute<viewport_t>    ( "viewport" );
 
         self->append_child( node::node_fly_camera_3D([=]( ref_t<node_t> self ){
-            auto pos = self->get_attribute<transform_3D_t>( "transform" );
-                 pos->position.y += 10; cursor::lock();
+            auto ppos = self->get_attribute<transform_3D_t>( "transform" );
+                 ppos->position.y += 10; cursor::lock();
 
             self->append_child( node::node_collision_ray([=]( ref_t<node_t> self ){
                 auto pos = self->get_attribute<transform_3D_t>( "transform" );
@@ -49,6 +23,11 @@ namespace ungine { void run() {
                     rl::DrawCircle( size.x/2, size.y/2, 3, rl::WHITE );
                 });
 
+                self->onCollision([=]( node_t* node, any_t overlap ){
+                    ppos->position += overlap.as<overlap_3D_t>().point
+                                    * pos->translate.scale;
+                });
+
             }) );
 
         }) );
@@ -56,22 +35,21 @@ namespace ungine { void run() {
         self->onUIDraw([=](){ rl::DrawFPS ( 10 , 10 ); });
         self->on3DDraw([=](){ rl::DrawGrid( 100, 10 ); });
 
-        self->append_child( node::node_3D([=]( ref_t<node_t> self ){
+        self->append_child( node::node_collision_cube([=]( ref_t<node_t> self ){
 
             auto pos = self->get_attribute<transform_3D_t>( "transform" );
                  pos->scale    = vec3_t({ 3, 3, 3 });
                  pos->position = vec3_t({ 0, 0,25 });
 
-            auto mdl = model_t( rl::GenMeshCube( 1, 1, 1 ) );
-            auto rnd = render_2D.get_viewport()->render;
-            auto shd = shader_t();
-            
-            mdl->materials[0].maps[0].texture = rnd->get_texture();
+            auto shp = self->get_attribute<shape_3D_t>( "shape" );
+                 shp->mode = shape::MODE::SHAPE_MODE_EDGES;
 
-            self->on3DDraw([=](){ shd.emit([=](){
-                mdl.draw( *pos, rl::WHITE );
-            }); });
-        
+            self->onDraw([=](){ shp->color = rl::WHITE; });
+
+            self->onCollision([=]( node_t* node, any_t overlap ){
+                shp->color = rl::GREEN;
+            });
+
         }) );
 
     });
