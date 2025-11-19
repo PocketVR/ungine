@@ -41,6 +41,8 @@ public:
         attr->obj[ name ] = type::bind( value );
     }
 
+    void clear() const noexcept { attr->obj.clear(); }
+
     /*─······································································─*/
 
     template< class T >

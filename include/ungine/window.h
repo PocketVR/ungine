@@ -30,6 +30,8 @@ namespace ungine { namespace window {
 
     inline void set_opacity( float opacity )   { rl::SetWindowOpacity( opacity ); }
 
+    inline void resize( ivec2_t size )         { rl::SetWindowSize( size.x, size.y ); }
+
     inline void set_size( ivec2_t size )       { rl::SetWindowSize( size.x, size.y ); }
 
     inline void set_min_size( ivec2_t size )   { rl::SetWindowMinSize( size.x, size.y ); }
@@ -38,7 +40,16 @@ namespace ungine { namespace window {
 
     inline ivec2_t get_size() { return ivec2_t({ rl::GetRenderWidth(), rl::GetRenderHeight() }); }
 
-    inline vec2_t normalized( vec2_t pos ) { return pos * vec2_t({ rl::GetRenderWidth(), rl::GetRenderHeight() }); }
+}}
+
+/*────────────────────────────────────────────────────────────────────────────*/
+
+namespace ungine { namespace window {
+    
+    inline vec2_t normalized( vec2_t pos ) { return pos * vec2_t({ 
+        type::cast<float>( rl::GetRenderWidth () ), 
+        type::cast<float>( rl::GetRenderHeight() ) 
+    }); }
 
 }}
 

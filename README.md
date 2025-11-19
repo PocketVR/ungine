@@ -1,4 +1,4 @@
-# Ungine: The Universal Node-Based Game Engine
+# Ungine: The Universal Nodepp Game Engine
 
 Ungine is a high-performance, open-source game engine designed to simplify game development across 2D, 3D, and Virtual Reality platforms. Built on the speed of C++, Ungine leverages a modern node-based architecture and an asynchronous event system to help developers create stable, scalable, and complex games with minimal boilerplate code.
 

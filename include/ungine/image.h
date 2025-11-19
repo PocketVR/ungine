@@ -61,16 +61,22 @@ public:
 
     rl::Vector2 size() const noexcept {
         if( !is_valid() ){ return rl::Vector2({ 0, 0 }); }
-        /*--------------*/ return { obj->img.width, obj->img.height };
+        /*--------------*/ return { 
+            type::cast<float>( obj->img.width  ), 
+            type::cast<float>( obj->img.height ) 
+        };
     }
 
     /*─······································································─*/
 
-    bool is_valid() const noexcept { return rl::IsImageValid( obj->img ); }
-
     rl::Image* operator->() const noexcept { return &get(); }
 
     rl::Image& get() const noexcept { return obj->img; }
+
+    bool is_valid() const noexcept { 
+        if( obj->img.width == 0 ){ return false; }
+        return rl::IsImageValid( obj->img ); 
+    }
 
     /*─······································································─*/
 

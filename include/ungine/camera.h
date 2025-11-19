@@ -14,7 +14,7 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace ungine { namespace node { node_t camera_3D( function_t<void,ref_t<node_t>> clb ){
+namespace ungine { namespace node { node_t node_camera_3D( function_t<void,ref_t<node_t>> clb ){
 return node_3D([=]( ref_t<node_t> self ){
 
     camera_3D_t camera;
@@ -47,8 +47,8 @@ clb( self ); }); }}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace ungine { namespace node { node_t fly_camera_3D( function_t<void,ref_t<node_t>> clb ){
-return camera_3D([=]( ref_t<node_t> self ){
+namespace ungine { namespace node { node_t node_fly_camera_3D( function_t<void,ref_t<node_t>> clb ){
+return node_camera_3D([=]( ref_t<node_t> self ){
 
     auto cam = self->get_attribute<camera_3D_t>   ( "camera" );
     auto pos = self->get_attribute<transform_3D_t>( "transform" );
@@ -86,7 +86,7 @@ clb( self ); }); }}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace ungine { namespace node { node_t camera_2D( function_t<void,ref_t<node_t>> clb ){
+namespace ungine { namespace node { node_t node_camera_2D( function_t<void,ref_t<node_t>> clb ){
 return node_2D([=]( ref_t<node_t> self ){
 
     camera_2D_t camera;
@@ -114,8 +114,8 @@ clb( self ); }); }}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-namespace ungine { namespace node { node_t fly_camera_2D( function_t<void,ref_t<node_t>> clb ){
-return camera_2D([=]( ref_t<node_t> self ){
+namespace ungine { namespace node { node_t node_fly_camera_2D( function_t<void,ref_t<node_t>> clb ){
+return node_camera_2D([=]( ref_t<node_t> self ){
 
     auto cam = self->get_attribute<camera_2D_t>   ( "camera" );
     auto pos = self->get_attribute<transform_2D_t>( "transform" );

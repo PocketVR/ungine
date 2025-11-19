@@ -26,22 +26,33 @@ public:
 
     /*─······································································─*/
 
+    model_t( rl::Model model ) noexcept : global_t(), obj( new NODE() ) {
+        obj->mdl = model;
+    }
+
     model_t( string_t path ) noexcept : global_t(), obj( new NODE() ) {
         obj->mdl = rl::LoadModel( path.get() );
     }
 
-    /*─······································································─*/
+    model_t( rl::Mesh mesh ) noexcept : global_t(), obj( new NODE() ) {
+        obj->mdl = rl::LoadModelFromMesh( mesh );
+    }
 
-    bool is_valid() const noexcept { return rl::IsModelValid( obj->mdl ); }
+    /*─······································································─*/
 
     rl::Model* operator->() const noexcept { return &get(); }
 
     rl::Model& get() const noexcept { return obj->mdl; }
 
+    bool is_valid() const noexcept { 
+        if( obj->mdl.meshCount==0 ){ return false; }
+        return rl::IsModelValid( obj->mdl ); 
+    }
+
     /*─······································································─*/
 
-    void draw( transform_3D_t trn ) const noexcept {
-    rl::rlDisableBackfaceCulling();
+    void draw( transform_3D_t trn, color_t color ) const noexcept {
+//  rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -55,13 +66,15 @@ public:
         vec3_t axs ({ 0.0f, 0.0f, 0.0f }); float ang = 0.0f;
 
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
-        rl::DrawModelEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, rl::WHITE );
+        rl::DrawModelEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-    rl::rlEnableBackfaceCulling();
+//  rl::rlEnableBackfaceCulling();
     }
 
-    void draw_edges( transform_3D_t trn ) const noexcept {
-    rl::rlDisableBackfaceCulling();
+    /*─······································································─*/
+
+    void draw_edges( transform_3D_t trn, color_t color ) const noexcept {
+//  rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -75,13 +88,15 @@ public:
         vec3_t axs ({ 0.0f, 0.0f, 0.0f }); float ang = 0.0f;
 
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
-        rl::DrawModelWiresEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, rl::WHITE );
+        rl::DrawModelWiresEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-    rl::rlEnableBackfaceCulling();
+//  rl::rlEnableBackfaceCulling();
     }
 
-    void draw_vertex( transform_3D_t trn ) const noexcept {
-    rl::rlDisableBackfaceCulling();
+    /*─······································································─*/
+
+    void draw_vertex( transform_3D_t trn, color_t color ) const noexcept {
+//  rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -95,9 +110,9 @@ public:
         vec3_t axs ({ 0.0f, 0.0f, 0.0f }); float ang = 0.0f;
 
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
-        rl::DrawModelPointsEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, rl::WHITE );
+        rl::DrawModelPointsEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-    rl::rlEnableBackfaceCulling();
+//  rl::rlEnableBackfaceCulling();
     }
 
     /*─······································································─*/
