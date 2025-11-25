@@ -43,16 +43,16 @@ namespace ungine { namespace node {
             )); } 
         });
 
-        self->on2DDraw([=](){ if( ptr.empty() ){ return; }
+        self->on2D([=](){ if( ptr.empty() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
 
         if( shp->mode & shape::MODE::SHAPE_MODE_FACES ){
             rl::DrawTriangleFan( ptr.data().get(), ptr.size(), shp->color );
-        } elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES ) {
+        } elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ) {
            for( auto x: ptr.data() ){ rl::DrawCircleV( x, 3, shp->color ); }
-        } elif( shp->mode & shape::MODE::SHAPE_MODE_VERTEX ){ 
-           auto pt = ptr.data(); // console::log( "A" );
+        } elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES ){ 
+           auto pt = ptr.data();
            for( int x=0; x<pt.size(); x++ )
               { rl::DrawLineV( pt[x],pt[x+1],shp->color ); }
         }
@@ -129,7 +129,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -153,7 +153,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -177,7 +177,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -201,7 +201,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -225,7 +225,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -249,7 +249,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -273,7 +273,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -297,7 +297,7 @@ namespace ungine { namespace node {
 
         auto shp = self->get_attribute<shape_3D_t>( "shape" );
 
-        self->on3DDraw([=](){ if( shp->model.null() ){ return; }
+        self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
           { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
     
@@ -318,7 +318,7 @@ namespace ungine { namespace node {
         auto shp = self->get_attribute<shape_3D_t>    ( "shape" );
         auto pos = self->get_attribute<transform_3D_t>( "transform" );
 
-        self->on3DDraw([=](){ if( shp->mode == 0x00 ){ return; }
+        self->on3D([=](){ if( shp->mode == 0x00 ){ return; }
 
         auto rot = math::matrix::rotation( math::negate( pos->translate.rotation ) );
         auto fr  = vec3_t({ rot.m2, rot.m6, rot.m10 }); 

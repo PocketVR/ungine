@@ -19,7 +19,7 @@ return node_3D([=]( ref_t<node_t> self ){
 
     camera_3D_t camera;
     /*-------*/ camera.fovy       = 90.0f;
-    /*-------*/ camera.projection = camera::VIEW::PROJECTION_PERSPECTIVE;
+    /*-------*/ camera.projection = camera::VIEW::PROJECTION_VIEW_PERSPECTIVE;
 
     self->set_attribute( "camera", camera );
     auto view = self->get_viewport(); if( view==nullptr ) { return; }

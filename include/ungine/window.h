@@ -95,15 +95,15 @@ namespace ungine { namespace window {
 
     inline bool is_focused()     { return rl::IsWindowFocused(); }
 
-    inline bool is_hidden()      { return mode::check( FLAGS::WINDOW_HIDDEN ); }
+    inline bool is_hidden()      { return mode::check( FLAGS::WINDOW_FLAG_HIDDEN ); }
 
-    inline bool is_maximized()   { return mode::check( FLAGS::WINDOW_MAXIMIZED ); }
+    inline bool is_maximized()   { return mode::check( FLAGS::WINDOW_FLAG_MAXIMIZED ); }
 
-    inline bool is_minimized()   { return mode::check( FLAGS::WINDOW_MINIMIZED ); }
+    inline bool is_minimized()   { return mode::check( FLAGS::WINDOW_FLAG_MINIMIZED ); }
 
-    inline bool is_fullscreen()  { return mode::check( FLAGS::WINDOW_FULLSCREEN ); }
+    inline bool is_fullscreen()  { return mode::check( FLAGS::WINDOW_FLAG_FULLSCREEN ); }
 
-    inline bool is_undecorated() { return mode::check( FLAGS::WINDOW_UNDECORATED ); }
+    inline bool is_undecorated() { return mode::check( FLAGS::WINDOW_FLAG_UNDECORATED ); }
 
 }}
 

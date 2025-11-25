@@ -160,22 +160,22 @@ namespace ungine { namespace blend { enum MODE {
 
 namespace ungine { namespace window { enum FLAGS {
 
-    WINDOW_VSYNC_HINT        = 0x00000040, // Set to try enabling V-Sync on GPU
-    WINDOW_FULLSCREEN        = 0x00000002, // Set to run program in fullscreen
-    WINDOW_RESIZABLE         = 0x00000004, // Set to allow resizable window
-    WINDOW_UNDECORATED       = 0x00000008, // Set to disable window decoration (frame and buttons)
-    WINDOW_HIDDEN            = 0x00000080, // Set to hide window
-    WINDOW_MINIMIZED         = 0x00000200, // Set to minimize window (iconify)
-    WINDOW_MAXIMIZED         = 0x00000400, // Set to maximize window (expanded to monitor)
-    WINDOW_UNFOCUSED         = 0x00000800, // Set to window non focused
-    WINDOW_TOPMOST           = 0x00001000, // Set to window always on top
-    WINDOW_ALWAYS_RUN        = 0x00000100, // Set to allow windows running while minimized
-    WINDOW_TRANSPARENT       = 0x00000010, // Set to allow transparent framebuffer
-    WINDOW_HIGHDPI           = 0x00002000, // Set to support HighDPI
-    WINDOW_MOUSE_PASSTHROUGH = 0x00004000, // Set to support mouse passthrough, only supported when WINDOW_UNDECORATED
-    WINDOW_BORDERLESS        = 0x00008000, // Set to run program in borderless windowed mode
-    WINDOW_MSAA_4X_HINT      = 0x00000020, // Set to try enabling MSAA 4X
-    WINDOW_INTERLACED_HINT   = 0x00010000  // Set to try enabling interlaced video format (for V3D)
+    WINDOW_FLAG_VSYNC_HINT        = 0x00000040, // Set to try enabling V-Sync on GPU
+    WINDOW_FLAG_FULLSCREEN        = 0x00000002, // Set to run program in fullscreen
+    WINDOW_FLAG_RESIZABLE         = 0x00000004, // Set to allow resizable window
+    WINDOW_FLAG_UNDECORATED       = 0x00000008, // Set to disable window decoration (frame and buttons)
+    WINDOW_FLAG_HIDDEN            = 0x00000080, // Set to hide window
+    WINDOW_FLAG_MINIMIZED         = 0x00000200, // Set to minimize window (iconify)
+    WINDOW_FLAG_MAXIMIZED         = 0x00000400, // Set to maximize window (expanded to monitor)
+    WINDOW_FLAG_UNFOCUSED         = 0x00000800, // Set to window non focused
+    WINDOW_FLAG_TOPMOST           = 0x00001000, // Set to window always on top
+    WINDOW_FLAG_ALWAYS_RUN        = 0x00000100, // Set to allow windows running while minimized
+    WINDOW_FLAG_TRANSPARENT       = 0x00000010, // Set to allow transparent framebuffer
+    WINDOW_FLAG_HIGHDPI           = 0x00002000, // Set to support HighDPI
+    WINDOW_FLAG_MOUSE_PASSTHROUGH = 0x00004000, // Set to support mouse passthrough, only supported when WINDOW_FLAG_UNDECORATED
+    WINDOW_FLAG_BORDERLESS        = 0x00008000, // Set to run program in borderless windowed mode
+    WINDOW_FLAG_MSAA_4X_HINT      = 0x00000020, // Set to try enabling MSAA 4X
+    WINDOW_FLAG_INTERLACED_HINT   = 0x00010000  // Set to try enabling interlaced video format (for V3D)
 
 };}}
 
@@ -183,13 +183,20 @@ namespace ungine { namespace window { enum FLAGS {
 
 namespace ungine { namespace texture { enum FILTER {
 
-    FILTER_TEXTURE_POINT=0,         // No filter, just pixel approximation
-    FILTER_TEXTURE_BILINEAR,        // Linear filtering
-    FILTER_TEXTURE_TRILINEAR,       // Trilinear filtering (linear with mipmaps)
-    FILTER_TEXTURE_ANISOTROPIC_4X,  // Anisotropic filtering 4x
-    FILTER_TEXTURE_ANISOTROPIC_8X,  // Anisotropic filtering 8x
-    FILTER_TEXTURE_ANISOTROPIC_16X, // Anisotropic filtering 16x
+    TEXTURE_FILTER_POINT=0,         // No filter, just pixel approximation
+    TEXTURE_FILTER_BILINEAR,        // Linear filtering
+    TEXTURE_FILTER_TRILINEAR,       // Trilinear filtering (linear with mipmaps)
+    TEXTURE_FILTER_ANISOTROPIC_4X,  // Anisotropic filtering 4x
+    TEXTURE_FILTER_ANISOTROPIC_8X,  // Anisotropic filtering 8x
+    TEXTURE_FILTER_ANISOTROPIC_16X, // Anisotropic filtering 16x
 
+};}}
+
+namespace ungine { namespace texture { enum WRAP {
+    TEXTURE_WRAP_REPEAT = 0,        // Repeats texture in tiled mode
+    TEXTURE_WRAP_CLAMP,             // Clamps texture to edge pixel in tiled mode
+    TEXTURE_WRAP_MIRROR_REPEAT,     // Mirrors and repeats the texture in tiled mode
+    TEXTURE_WRAP_MIRROR_CLAMP       // Mirrors and clamps to border the texture in tiled mode
 };}}
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -264,8 +271,8 @@ namespace ungine { namespace gpu { enum ATTR_TYPE {
 
 namespace ungine { namespace camera { enum VIEW {
 
-    PROJECTION_PERSPECTIVE=0, // Perspective  projection
-    PROJECTION_ORTHOGRAPHIC   // Orthographic projection
+    PROJECTION_VIEW_PERSPECTIVE=0, // Perspective  projection
+    PROJECTION_VIEW_ORTHOGRAPHIC   // Orthographic projection
 
 }; }}
 

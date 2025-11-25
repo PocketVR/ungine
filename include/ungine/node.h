@@ -38,9 +38,9 @@ public:
     event_t<node_t*,any_t> onCollision;
     event_t<>              onNext  ;
     event_t<>              onOpen  ;
-    event_t<>              onUIDraw;
-    event_t<>              on2DDraw;
-    event_t<>              on3DDraw;
+    event_t<>              onUI    ;
+    event_t<>              on2D    ;
+    event_t<>              on3D    ;
     event_t<>              onDraw  ;
     event_t<float>         onLoop  ;
     event_t<>              onClose ;
@@ -89,10 +89,10 @@ protected:
         for( auto x: get_children()   ){ x->obj->node.parent=nullptr; }
         if ( !process::should_close() ){ remove_from_parent(); }
         
-        onCollision.clear(); onNext  .clear();
-        on2DDraw   .clear(); onUIDraw.clear();
-        onOpen     .clear(); on3DDraw.clear(); 
-        onLoop     .clear(); /*----*/ clear();
+        onCollision.clear(); onNext.clear();
+        on2D       .clear(); onUI  .clear();
+        onOpen     .clear(); on3D  .clear(); 
+        onLoop     .clear(); /*--*/ clear();
         
         onClose .emit ();
         
@@ -142,24 +142,26 @@ public:
 
     /*─······································································─*/
 
+    node_t* append_child( string_t name, const node_t& value ) const noexcept {
+
+        if( !exists() ) /*--------*/ { return nullptr; }
+        if( has_child( name ) ){ remove_child( name ); }
+
+        value.set_attribute( "name", name );
+        value.obj->node.parent   =obj->node. node;
+        obj->node.node_list[name]=value.obj->node;
+
+        return get_child( name );
+    }
+
+    node_t* append_child( const node_t& value ) const noexcept {
+        return append_child( encoder::key::generate(12), value );
+    }
+
     bool has_child( string_t name ) const noexcept { 
         if( !exists() ) /*------------*/ { return false; }
         if( obj->node.node_list.empty() ){ return false; }
         return obj->node.node_list.has( name ); 
-    }
-
-    void append_child( string_t name, const node_t& value ) const noexcept {
-
-        if( !exists() ) /*----------------*/ { return; }
-        if( has_child( name ) ){ remove_child( name ); }
-
-        value.set_attribute( "name", name );
-        value.obj->node.parent   =obj->node.node;
-        obj->node.node_list[name]=value.obj->node;
-    }
-
-    void append_child( const node_t& value ) const noexcept {
-         append_child( encoder::key::generate(12), value );
     }
 
     /*─······································································─*/
@@ -202,9 +204,9 @@ public:
 
         //  if( node->has_attribute( "viewport" ) ){ return; }
 
-            if( !node->on3DDraw.empty() ){ que->event3D.push( node->on3DDraw ); }
-            if( !node->on2DDraw.empty() ){ que->event2D.push( node->on2DDraw ); }
-            if( !node->onUIDraw.empty() ){ que->eventUI.push( node->onUIDraw ); }
+            if( !node->on3D.empty() ){ que->event3D.push( node->on3D ); }
+            if( !node->on2D.empty() ){ que->event2D.push( node->on2D ); }
+            if( !node->onUI.empty() ){ que->eventUI.push( node->onUI ); }
 
         return true; }, true ); return que;
 

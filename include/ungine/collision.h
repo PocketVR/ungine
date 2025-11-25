@@ -208,6 +208,21 @@ namespace ungine { namespace collision {
     /*--*/ sign.point = Vector3Scale( sign.axis, sign.overlap * sign.sign );
     return type::bind( sign ); } while(0); return nullptr; }
     
+    /*─······································································─*/
+
+    bool get_3D_collision_weak( node_t a, node_t b ) {
+
+        auto pos_a = a.get_attribute<transform_3D_t>( "transform" );
+        auto pos_b = b.get_attribute<transform_3D_t>( "transform" );
+
+        auto dist  = math::distance( pos_a->position, pos_b->position );
+        auto rad_a = math::length  ( pos_a->scale );
+        auto rad_b = math::length  ( pos_b->scale );
+
+        return dist <= rad_a + rad_b ;
+
+    }
+    
 }}
 
 /*────────────────────────────────────────────────────────────────────────────*/
@@ -250,8 +265,8 @@ namespace ungine { namespace collision {
 
         auto axes = get_2D_collision_axes( a ); if( axes.empty() ){ break; }
 
-        float r = fabsf( Vector2DotProduct( axes[0], axis ) ) * pos->translate.scale.x/2 +
-                  fabsf( Vector2DotProduct( axes[1], axis ) ) * pos->translate.scale.y/2 ;
+        float r = fabsf( Vector2DotProduct( axes[0], axis ) ) * pos->translate.scale.x +
+                  fabsf( Vector2DotProduct( axes[1], axis ) ) * pos->translate.scale.y ;
 
         float c = Vector2DotProduct( pos->translate.position, axis );
         
@@ -345,6 +360,21 @@ namespace ungine { namespace collision {
 
     /*--*/ sign.point = Vector2Scale( sign.axis, sign.overlap * sign.sign );
     return type::bind( sign ); } while(0); return nullptr; }
+    
+    /*─······································································─*/
+
+    bool get_2D_collision_weak( node_t a, node_t b ) {
+
+        auto pos_a = a.get_attribute<transform_2D_t>( "transform" );
+        auto pos_b = b.get_attribute<transform_2D_t>( "transform" );
+
+        auto dist  = math::distance( pos_a->position, pos_b->position );
+        auto rad_a = math::length  ( pos_a->scale );
+        auto rad_b = math::length  ( pos_b->scale );
+
+        return dist <= rad_a + rad_b ;
+
+    }
 
 }}
 
@@ -483,12 +513,14 @@ namespace ungine { namespace collision { void next( node_t a, node_t b ){
     if(( vis1->mask & vis2->mask )==0){ return; }
 
     if( col1->mode & collision::MODE::COLLISION_MODE_2D ){
+    if( !get_2D_collision_weak( a, b ) ){ return; }
 
         auto overlap = get_2D_collision( a, b );
         if( overlap.null() ){ return; }
         a.onCollision.emit( &b, any_t(*overlap) );
 
     } else {
+    if( !get_3D_collision_weak( a, b ) ){ return; }
         
         auto overlap = get_3D_collision( a, b );
         if( overlap.null() ){ return; }

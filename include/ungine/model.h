@@ -51,8 +51,32 @@ public:
 
     /*─······································································─*/
 
+    void set_wrap_mode( uint flag ) const noexcept {
+        if ( !is_valid() ){ return; }
+        for( auto x=obj->mdl.materialCount; x--; ){
+        for( auto y=12 ; y--; ){ // MAX_MATERIAL_MAPS = 12
+             auto z=obj->mdl.materials[x].maps[y].texture;
+        if ( z.id > 0 ) { 
+             rl::SetTextureWrap( z, flag );
+        }}}
+    }
+
+    /*─······································································─*/
+
+    void set_texture_filter( uint filter ) const noexcept {
+        if ( !is_valid() ){ return; }
+        for( auto x=obj->mdl.materialCount; x--; ){
+        for( auto y=12 ; y--; ){ // MAX_MATERIAL_MAPS = 12
+             auto z=obj->mdl.materials[x].maps[y].texture;
+        if ( z.id > 0 ) { 
+             rl:SetTextureFilter( z, filter );
+        }}}
+    }
+
+    /*─······································································─*/
+
     void draw( transform_3D_t trn, color_t color ) const noexcept {
-//  rl::rlDisableBackfaceCulling();
+    rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -68,13 +92,13 @@ public:
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
         rl::DrawModelEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-//  rl::rlEnableBackfaceCulling();
+    rl::rlEnableBackfaceCulling();
     }
 
     /*─······································································─*/
 
     void draw_edges( transform_3D_t trn, color_t color ) const noexcept {
-//  rl::rlDisableBackfaceCulling();
+    rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -90,13 +114,13 @@ public:
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
         rl::DrawModelWiresEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-//  rl::rlEnableBackfaceCulling();
+    rl::rlEnableBackfaceCulling();
     }
 
     /*─······································································─*/
 
     void draw_vertex( transform_3D_t trn, color_t color ) const noexcept {
-//  rl::rlDisableBackfaceCulling();
+    rl::rlDisableBackfaceCulling();
 
         auto rot = rl::QuaternionFromEuler(
              trn.translate.rotation.x,
@@ -112,7 +136,7 @@ public:
         rl::QuaternionToAxisAngle( rot, &axs, &ang );
         rl::DrawModelPointsEx( obj->mdl, pos, axs, ang*RAD2DEG, scl, color );
 
-//  rl::rlEnableBackfaceCulling();
+    rl::rlEnableBackfaceCulling();
     }
 
     /*─······································································─*/

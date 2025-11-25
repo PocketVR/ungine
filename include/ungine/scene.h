@@ -14,20 +14,6 @@
 
 /*────────────────────────────────────────────────────────────────────────────*/
 
-/*
-namespace ungine { struct environment_t {
-    color_t color = rl::WHITE;
-    ptr_t<shader_t> shader;
-    vec3_t sun_direction;
-    bool  cast_shadow;
-    float sun_energy;
-    float fog = 0.0f;
-    color_t ambient_light = rl::WHITE;
-};}
-*/
-
-/*────────────────────────────────────────────────────────────────────────────*/
-
 namespace ungine { namespace render {
 
     void emit_scissor( rect_t scissor, function_t<void> callback ) {
@@ -156,8 +142,6 @@ return node_render([=]( ref_t<node_t> self ){
 
             /*---------------------------*/ collision_list.push( node );
         return true; }, true ); auto data = collision_list.data();
-
-        /* FIXME: collision caching system */
 
         for( auto x:data ) { for( auto y:data ) {
         if ( x == y ) /*----------*/ { continue; }
