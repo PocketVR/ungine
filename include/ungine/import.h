@@ -59,9 +59,10 @@ namespace ungine { namespace rl {
 #include "render.h"
 #include "shader.h"
 
-#include "input.h"
+#include "kernel.h"
 #include "window.h"
 #include "engine.h"
+#include "input.h"
 
 #include "node.h"
 #include "shape.h"

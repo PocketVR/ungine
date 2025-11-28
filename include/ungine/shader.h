@@ -154,14 +154,14 @@ protected:
 
     /*─······································································─*/
 
-    string_t format_framge_shader() const noexcept {
+    string_t format_fs_shader() const noexcept {
         if( obj->fs.empty() ) /*---*/ { return nullptr; }
-        return regex::format( "${0}\n${1}", GLSL_VERSION, obj->fs );
+        return regex::format( "${0}${1}", GLSL_VERSION, obj->fs );
     }
 
-    string_t format_vertex_shader() const noexcept {
+    string_t format_vs_shader() const noexcept {
         if( obj->vs.empty() ) /*---*/ { return nullptr; }
-        return regex::format( "${0}\n${1}", GLSL_VERSION, obj->vs );
+        return regex::format( "${0}${1}", GLSL_VERSION, obj->vs );
     }
 
 public:
@@ -171,7 +171,7 @@ public:
 
     /*─······································································─*/
 
-    void set_fragment_shader( file_t file ) const noexcept { obj->vs=stream::await(file); }
+    void set_fragment_shader( file_t file ) const noexcept { obj->fs=stream::await(file); }
 
     void set_fragment_shader( string_t code ) const noexcept { obj->fs=code; }
 
@@ -214,42 +214,43 @@ public:
 
     /*─······································································─*/
 
-    void set_variables() const /*noexcept*/ { 
+    void emit( function_t<void> cb ) const /*noexcept*/ {
+        if( is_valid() ){
+            rl::BeginShaderMode(*obj->ctx); next(); cb();
+            rl::EndShaderMode(); /*--------------------*/
+        }
+    }
+
+    /*─······································································─*/
+
+    void next() const /*noexcept*/ { 
          set_vertex_variables  ();
          set_fragment_variables();
     }
 
     /*─······································································─*/
 
-    void emit( function_t<void> cb ) const /*noexcept*/ {
+    bool compile() const /*noexcept*/ {
 
-        if( obj->ctx.null() ){ compile(); }
-
-        rl::BeginShaderMode(*obj->ctx); set_variables(); cb();
-        rl::EndShaderMode();
-
-    }
-
-    /*─······································································─*/
-
-    void compile() const /*noexcept*/ {
         if(!obj->ctx.null() ){ rl::UnloadShader( *obj->ctx ); }
 
-        auto fs = format_framge_shader();
-        auto vs = format_vertex_shader();
+        auto fs = format_fs_shader();
+        auto vs = format_vs_shader();
 
         obj->ctx = type::bind( rl::LoadShaderFromMemory( 
             vs.empty() ? 0 : vs.get(),
             fs.empty() ? 0 : fs.get()
         ));
+
+        return is_valid();
         
-        if( !is_valid() ){ throw except_t("Invalid Shader"); }
     }
 
     /*─······································································─*/
 
     void free() const noexcept {
          if( !is_valid() ){ return; } rl::UnloadShader( *obj->ctx );
+         obj->ctx.free();
     }
 
 }; }

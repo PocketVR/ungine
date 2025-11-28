@@ -26,9 +26,10 @@ namespace ungine { namespace render {
          rl::EndTextureMode  (); /*---------------*/
     }
 
-    void emit_shader( shader_t* shader, function_t<void> callback ) {
-         if( shader == nullptr ){ return; }
-         rl::BeginShaderMode( shader->get() ); callback();
+    void emit_shader( const shader_t* shader, function_t<void> callback ) {
+         if( shader == nullptr || !shader->is_valid() ){ return; }
+         rl::BeginShaderMode( shader->get() ); 
+         shader->next(); callback();
          rl::EndShaderMode  ();
     }
 
@@ -50,7 +51,7 @@ namespace ungine { namespace render {
     }
 
     void emit_vr( vr_t* device, function_t<void> callback ) {
-         if( device == nullptr ){ return; }
+         if( device == nullptr /*--------------*/ ){ return; }
          rl::BeginVrStereoMode( device->device() ); callback();
          rl::EndVrStereoMode  (); /*-------------------------*/
     }
@@ -161,7 +162,7 @@ return node_render([=]( ref_t<node_t> self ){
 
     render::emit( [&](){ if( vpt->render.null() ){ return; }
     if( shd != nullptr && shd->is_valid() )
-      { rl::BeginShaderMode( shd->get() ); shd->set_variables(); }
+      { rl::BeginShaderMode( shd->get() ); shd->next(); }
         
         auto txt = vpt->render->get_texture(); rl::ClearBackground( rl::BLANK );
         auto src = rect_t({ 0, 0, type::cast<float>( txt.width ), type::cast<float>(-txt.height ) });

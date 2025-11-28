@@ -45,7 +45,7 @@ namespace ungine { namespace node {
 
         self->on2D([=](){ if( ptr.empty() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
 
         if( shp->mode & shape::MODE::SHAPE_MODE_FACES ){
             rl::DrawTriangleFan( ptr.data().get(), ptr.size(), shp->color );
@@ -131,7 +131,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -155,7 +155,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -179,7 +179,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -203,7 +203,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -227,7 +227,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -251,7 +251,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -275,7 +275,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
@@ -299,7 +299,7 @@ namespace ungine { namespace node {
 
         self->on3D([=](){ if( shp->model.null() ){ return; }
         if( !shp->shader.null() && shp->shader->is_valid() )
-          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->set_variables(); }
+          { rl::BeginShaderMode( shp->shader->get() ); shp->shader->next(); }
     
             if  ( shp->mode & shape::MODE::SHAPE_MODE_FACES  ){ shp->model->draw       ( *pos, shp->color ); }
             elif( shp->mode & shape::MODE::SHAPE_MODE_EDGES  ){ shp->model->draw_edges ( *pos, shp->color ); }
